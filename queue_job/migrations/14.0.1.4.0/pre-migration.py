@@ -1,6 +1,10 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
+import logging
+
 from odoo.tools.sql import column_exists, table_exists
+
+_logger = logging.getLogger(__name__)
 
 
 def migrate(cr, version):
@@ -15,7 +19,8 @@ def migrate(cr, version):
         )
         cr.execute(
             """
-            ALTER TABLE queue_job ADD COLUMN exec_time double precision DEFAULT 0;
+            ALTER TABLE queue_job ADD COLUMN IF NOT EXISTS exec_time
+            double precision DEFAULT 0;
         """
         )
         cr.execute(
